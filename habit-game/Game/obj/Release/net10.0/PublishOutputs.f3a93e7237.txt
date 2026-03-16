@@ -1,0 +1,6 @@
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Game
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Game.dll
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Game.deps.json
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Game.runtimeconfig.json
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Game.pdb
+/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/publish/Spectre.Console.dll

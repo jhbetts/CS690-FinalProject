@@ -9,7 +9,7 @@ public class FileSaver {
     public FileSaver(string fileName) {
         this.fileName = fileName;
         if(!File.Exists(this.fileName)) {
-            File.Create(this.fileName).Close();
+            File.WriteAllText(this.fileName, "[]");
         }
     }
 
@@ -17,7 +17,7 @@ public class FileSaver {
     //     File.AppendAllText(this.fileName, line + Environment.NewLine);
     // }
 
-    public void SaveHabits(List<Habit> data)
+    public void Save<T>(List<T> data)
     {
         var options = new JsonSerializerOptions
         {

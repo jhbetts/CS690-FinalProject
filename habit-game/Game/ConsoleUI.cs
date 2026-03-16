@@ -1,8 +1,5 @@
 namespace Game;
 
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
 using Spectre.Console;
 
 public class ConsoleUI
@@ -15,30 +12,74 @@ public class ConsoleUI
     }
     public void Show()
     {
-        var mode = AnsiConsole.Prompt(
-            new SelectionPrompt<string>()
-                .Title("Select Mode")
-                .AddChoices("Add Habit", "Remove Habit", "Add Point", "Check Score", "View Habit Details", "Reset Score", "Quit")
-        );
+        AnsiConsole.Clear();
 
+        bool running = true;
+        while (running)
+        {
+            var score = dataManager.TodaysScore;
+            var panel = new Panel(score.ToString());
+            AnsiConsole.Write(panel);
+            string mode = "";
+            if (mode == "") ;
+            {
+                mode = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select Mode")
+                        .AddChoices("Add Habit", 
+                        "Remove Habit", 
+                        "Add Occurrence", 
+                        // "View Score Detials", 
+                        "View Habit Details", 
+                        // "Reset Score", 
+                        "Quit")
+                );
+            }
+            
+            if (mode == "Add Habit")
+            {
+                AddHabitUI();
+            }            
+            if (mode == "Remove Habit")
+            {
+                RemoveHabitUI();
+            }
+            if (mode == "View Habit Details")
+            {
+                ViewHabitDetails();
+            }
+            if (mode == "Add Occurrence")
+            {
+                AddPoint();
+            }
+            // if (mode == "Reset Score")
+            // {
+            //     dataManager.ResetScores(dataManager.Habits);
+            // }
+            if (mode == "Check Score")
+            {
+                CheckScore(score);
+            }
+            if (mode == "Quit")
+            {
+                dataManager.Scores.Add(score);
+                dataManager.saveScore(dataManager.Scores);
+                running = false;
+            }
+            AnsiConsole.Clear();
+        }
+    }
 
-        if (mode == "Add Habit")
+    private void CheckScore(Score score)
+    {
+        AnsiConsole.WriteLine(score.ToString());
+        for (int i = 0; i < dataManager.Habits.Count(); i++)
         {
-            AddHabitUI();
-        }            
-        if (mode == "Remove Habit")
-        {
-            RemoveHabitUI();
+            AnsiConsole.WriteLine("Name: " + dataManager.Habits[i].Name);
+            AnsiConsole.WriteLine("Score: " + dataManager.Habits[i].DisplayProgress());
         }
-        if (mode == "View Habit Details")
-        {
-            ViewHabitDetails();
-        }
-        if (mode == "Add Point")
-        {
-            AddPoint();
-        }
-
+        AnsiConsole.WriteLine("Press any key to continue.");
+        AnsiConsole.Console.Input.ReadKey(true);
     }
 
     public void AddHabitUI()
@@ -51,39 +92,44 @@ public class ConsoleUI
             .AddChoices("Good", "Bad")
         );
         var goodBad = goodBadString == "Good";
-        Habit newHabit = new Habit(Name:name, Goal:goal, Score:0, IsGoodHabit:goodBad);
+        Habit newHabit = new Habit(Name:name, Goal:0, Score:0, IsGoodHabit:goodBad);
+        newHabit.SetGoal(goal);
         dataManager.addHabit(newHabit);
     }
+
     public void RemoveHabitUI()
     {
         if (dataManager.Habits.Count > 0)
-        {
-            var habitToRemove = AnsiConsole.Prompt(
-                new SelectionPrompt<Habit>()
-                .Title("Select habit to remove")
-                .AddChoices(dataManager.Habits)
-            );
-            dataManager.removeHabit(habitToRemove);
-        } else
-        {
-            AnsiConsole.Write("No habits to remove");
-        }
+            {
+                var habitToRemove = AnsiConsole.Prompt(
+                    new SelectionPrompt<Habit>()
+                    .Title("Select habit to remove")
+                    .AddChoices(dataManager.Habits)
+                );
+                dataManager.removeHabit(habitToRemove);
+            } else
+            {
+                AnsiConsole.Write("No habits to remove");
+            }
     }
+
     public void ViewHabitDetails()
     {
         if (dataManager.Habits.Count > 0)
         {
             var habit = AnsiConsole.Prompt(
                 new SelectionPrompt<Habit>()
-                .Title("Select habit to remove")
+                .Title("Select habit to view")
                 .AddChoices(dataManager.Habits)
             );
             AnsiConsole.WriteLine("Name: "+ habit.Name);
             AnsiConsole.WriteLine("Score: " + habit.DisplayProgress());
             AnsiConsole.WriteLine("Good Habit: "+ habit.IsGoodHabit);
+            AnsiConsole.WriteLine("Press any key to continue.");
+            AnsiConsole.Console.Input.ReadKey(true);
         } else
         {
-            AnsiConsole.Write("No habits to remove");
+            AnsiConsole.Write("No habits to view");
         }
     }
     public void AddPoint()
