@@ -1,4 +1,3 @@
-/workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/Game
 /workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/Game.deps.json
 /workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/Game.runtimeconfig.json
 /workspaces/CS690-FinalProject/habit-game/Game/bin/Release/net10.0/Game.dll

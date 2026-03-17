@@ -11,8 +11,8 @@ public class DataManager
 
     public DataManager()
     {
-        var HabitFile = "/workspaces/CS690-FinalProject/habit-game/Game/habit_data.json";
-        var ScoreFile = "/workspaces/CS690-FinalProject/habit-game/Game/scores.json";
+        var HabitFile = "./habit_data.json";
+        var ScoreFile = "./scores.json";
         habitSaver = new FileSaver(HabitFile);
         scoreSaver = new FileSaver(ScoreFile);
         if (File.Exists(HabitFile))
