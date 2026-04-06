@@ -10,6 +10,7 @@ public class ConsoleUI
     public ConsoleUI()
     {
         dataManager = new DataManager();
+        dataManager.SetTodaysScore(dataManager.TodaysScore, dataManager.Habits);
     }
     public void Show()
     {

@@ -3,8 +3,8 @@ namespace Game;
 using System.Text.Json;
 public class DataManager
 {
-    FileSaver habitSaver;
-    FileSaver scoreSaver;
+    public FileSaver habitSaver;
+    public FileSaver scoreSaver;
     public List<Habit> Habits;
     public List<Score> Scores;
     public Score TodaysScore;
@@ -43,8 +43,6 @@ public class DataManager
             Scores = new List<Score>();
         }
         TodaysScore = new Score(0,0);
-        SetTodaysScore(TodaysScore, Habits);
-
     }
     
     public void ResetScores(List<Habit> habits)
@@ -79,28 +77,30 @@ public class DataManager
         }
     }
 
-    public void addHabit(Habit habit)
+    public bool addHabit(Habit habit)
     {   
         Habits.Add(habit);
         habitSaver.Save(Habits);
         SetTodaysScore(TodaysScore, Habits);
+        return true;
     }
-    public void removeHabit(Habit habit)
+    public bool removeHabit(Habit habit)
     {   
         Habits.Remove(habit);
         habitSaver.Save(Habits);
         SetTodaysScore(TodaysScore, Habits);
+        return true;
+    }
+    public bool saveHabits(List<Habit> habits)
+    {
+        habitSaver.Save(habits);
+        SetTodaysScore(TodaysScore, habits);
+        return true;
 
     }
-    public void saveHabits(List<Habit> habits)
+    public bool saveScore(List<Score> scores)
     {
-        habitSaver.Save(Habits);
-        SetTodaysScore(TodaysScore, Habits);
-
-    }
-    public void saveScore(List<Score> scores)
-    {
-
         scoreSaver.Save(scores);
+        return true;
     }
 }
