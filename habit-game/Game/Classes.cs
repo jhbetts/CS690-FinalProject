@@ -22,6 +22,18 @@ public class Habit
     {
         return Name;
     }
+
+    public string GoodBad()
+    {
+        if (IsGoodHabit)
+        {
+            return "Good";
+        }
+        else
+        {
+            return "Bad";
+        }
+    }
     public void DisplayDetails()
     {
         Console.WriteLine(Name);
@@ -95,7 +107,7 @@ public class Score
     {
         this.Goal = Goal;
         this.Progress = Progress;
-        this.Date = DateTime.Now;
+        this.Date = DateTime.Today;
     }
 
     public override string ToString()
@@ -115,3 +127,18 @@ public class Score
     }
 }
 
+public class Alert
+{
+    public string From{get;set;}
+    public string To{get; set;}
+    public string Text{get; set;}
+
+    [JsonConstructor]
+    public Alert(string From, string To, string Text)
+    {
+        this.From = From;
+        this.To = To;
+        this.Text = Text;
+    }
+
+}

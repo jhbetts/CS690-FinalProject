@@ -100,6 +100,7 @@ public class DataManager
     }
     public void saveScore(List<Score> scores)
     {
-        scoreSaver.Save(Scores);
+
+        scoreSaver.Save(scores);
     }
 }
