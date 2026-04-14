@@ -480,3 +480,12 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+habit-game/Game/ConsoleUI.cs
+Game-release.zip
+habit-game/Dockerfile
+secrets.txt
+habit-game/Game/alerts.json
+habit-game/Game/habit_data.json
+habit-game/Game/scores.json
+habit-game/Game/server.json
+habit-game/Game.Test/test_habit_data.json

@@ -4,16 +4,14 @@ namespace Game;
 
 public class Alert
 {
-    public string From{get;set;}
     public string To{get; set;}
-    public string Text{get; set;}
+    public DateTime SendTime{get; set;}
 
     [JsonConstructor]
-    public Alert(string From, string To, string Text)
+    public Alert( string To, DateTime SendTime)
     {
-        this.From = From;
         this.To = To;
-        this.Text = Text;
+        this.SendTime=SendTime;
     }
 
 }

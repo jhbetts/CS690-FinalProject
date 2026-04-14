@@ -34,7 +34,8 @@ public class ConsoleUI
                         "View Score Details", 
                         "View Habit Details", 
                         "Reset Score", 
-                        "Create Alerts",
+                        "Create New Alert",
+                        "Setup Alert Sender",
                         "Quit")
                 );
             }
@@ -63,9 +64,13 @@ public class ConsoleUI
             {
                 CheckScore(score);
             }
-            if (mode == "Create Alerts")
+            if (mode == "Create New Alert")
             {
                 CreateAlert();
+            }
+            if (mode == "Setup Alert Sender")
+            {
+                SetupAlerts();
             }
             if (mode == "Quit")
             {
@@ -85,13 +90,28 @@ public class ConsoleUI
             AnsiConsole.Clear();
         }
     }
-
+    private void SetupAlerts()
+    {
+        string mailServer = AnsiConsole.Ask<string>("Input SMTP Server URL: ");
+        string mailUsername = AnsiConsole.Ask<string>("Input SMTP Server Username: ");
+        string mailPassword = AnsiConsole.Ask<string>("Input SMTP Server Password: ");
+        int mailPort = AnsiConsole.Ask<int>("Input SMTP Server Port: ");
+        var SSLString = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title("Is SSL/TSL required?")
+            .AddChoices("Yes", "No")
+        );
+        var SSLRequired = SSLString == "Yes";
+        dataManager.AddMailservice(mailServer, mailUsername, mailPassword, mailPort, SSLRequired);
+    }
+    private void SendAlert()
+    {
+        dataManager.SendAlertEmails();
+    }
     private void CreateAlert()
     {
-        Console.WriteLine("Alerts are not functional at this time.");
-        string fromEmail = AnsiConsole.Ask<string>("From: ");
+        // Console.WriteLine("Alerts are not functional at this time.");
         string toEmail = AnsiConsole.Ask<string>("To: ");
-        string text = "";
         DateTime alertTime;
         string prompt = "Enter time to send alert email in 24 hour format (e.g. 22:00): ";
         Console.WriteLine(prompt);
@@ -104,12 +124,8 @@ public class ConsoleUI
         }
 
 
-        for (int i = 0; i < dataManager.Habits.Count(); i++)
-        {
-            string line = dataManager.Habits[i].Name + "|" + dataManager.Habits[i].DisplayProgress() + "|" + dataManager.Habits[i].GoodBad() + "\n";
-            text += line;
-        }
-        var alert = new Alert(From: fromEmail, To: toEmail, Text: text);
+        var alert = new Alert(To: toEmail, SendTime: alertTime);
+        dataManager.addAlert(alert);
     }
     private void CheckScore(Score score)
     {
@@ -173,7 +189,7 @@ public class ConsoleUI
                 .Title("Select habit to view")
                 .AddChoices(dataManager.Habits)
             );
-            AnsiConsole.WriteLine("Name: "+ habit.Name);
+            AnsiConsole.WriteLine("Name: " + habit.Name);
             AnsiConsole.WriteLine("Score: " + habit.DisplayProgress());
             AnsiConsole.WriteLine("Good Habit: "+ habit.IsGoodHabit);
             AnsiConsole.WriteLine("Press any key to continue.");
