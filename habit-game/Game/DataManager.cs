@@ -102,7 +102,7 @@ public class DataManager
             var mailService = Servers[i];
             for (int j = 0; j < Alerts.Count(); j++)
             {
-                var alert = Alerts[i];
+                var alert = Alerts[j];
                 mailService.SendAlert(text, alert.To);
             }
 

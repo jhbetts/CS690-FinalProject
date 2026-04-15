@@ -1,20 +1,26 @@
 namespace Game;
 
 using System.Net.Mail;
+using Quartz;
 using Spectre.Console;
 
 public class ConsoleUI
 {
     DataManager dataManager;
+    IScheduler scheduler;
+    IJobDetail alertJob;
 
-    public ConsoleUI()
+
+    public ConsoleUI(DataManager dataManager, IScheduler scheduler, IJobDetail alertJob)
     {
-        dataManager = new DataManager();
-        dataManager.SetTodaysScore(dataManager.TodaysScore, dataManager.Habits);
+        this.dataManager = dataManager;
+        this.scheduler = scheduler;
+        this.alertJob = alertJob;
+        this.dataManager.SetTodaysScore(dataManager.TodaysScore, dataManager.Habits);
     }
-    public void Show()
+    public async Task Show()
     {
-        AnsiConsole.Clear();
+        // AnsiConsole.Clear();
 
         bool running = true;
         while (running)
@@ -66,12 +72,13 @@ public class ConsoleUI
             }
             if (mode == "Create New Alert")
             {
-                CreateAlert();
+                await CreateAlert();
             }
             if (mode == "Setup Alert Sender")
             {
                 SetupAlerts();
             }
+
             if (mode == "Quit")
             {
                 var scores = dataManager.Scores;
@@ -108,7 +115,7 @@ public class ConsoleUI
     {
         dataManager.SendAlertEmails();
     }
-    private void CreateAlert()
+    private async Task CreateAlert()
     {
         // Console.WriteLine("Alerts are not functional at this time.");
         string toEmail = AnsiConsole.Ask<string>("To: ");
@@ -126,6 +133,7 @@ public class ConsoleUI
 
         var alert = new Alert(To: toEmail, SendTime: alertTime);
         dataManager.addAlert(alert);
+        await Program.ScheduleAlertTrigger(scheduler, alertJob, alert, dataManager.Alerts.Count - 1);
     }
     private void CheckScore(Score score)
     {
