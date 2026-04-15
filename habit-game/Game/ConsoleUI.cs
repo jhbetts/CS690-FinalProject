@@ -20,7 +20,7 @@ public class ConsoleUI
     }
     public async Task Show()
     {
-        // AnsiConsole.Clear();
+        AnsiConsole.Clear();
 
         bool running = true;
         while (running)
@@ -41,7 +41,7 @@ public class ConsoleUI
                         "View Habit Details", 
                         "Reset Score", 
                         "Create New Alert",
-                        "Setup Alert Sender",
+                        "Setup Alert Service",
                         "Quit")
                 );
             }
@@ -74,7 +74,7 @@ public class ConsoleUI
             {
                 await CreateAlert();
             }
-            if (mode == "Setup Alert Sender")
+            if (mode == "Setup Alert Service")
             {
                 SetupAlerts();
             }
@@ -117,10 +117,9 @@ public class ConsoleUI
     }
     private async Task CreateAlert()
     {
-        // Console.WriteLine("Alerts are not functional at this time.");
         string toEmail = AnsiConsole.Ask<string>("To: ");
         DateTime alertTime;
-        string prompt = "Enter time to send alert email in 24 hour format (e.g. 22:00): ";
+        string prompt = "Enter time to send alert email in 24 hour format (e.g. 22:00 = 10:00PM): ";
         Console.WriteLine(prompt);
         string time = Console.ReadLine();
         while(!DateTime.TryParse(time, out alertTime))
@@ -143,7 +142,6 @@ public class ConsoleUI
         table.AddColumn("Name");
         table.AddColumn("Score");
         table.AddColumn("Good/Bad");
-        // table.AddRow("Total Score", score.ToString, "");
         for (int i = 0; i < dataManager.Habits.Count(); i++)
         {
             table.AddRow(dataManager.Habits[i].Name, dataManager.Habits[i].DisplayProgress(), dataManager.Habits[i].GoodBad());

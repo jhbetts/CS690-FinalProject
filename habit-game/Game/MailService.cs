@@ -1,7 +1,3 @@
-// Source - https://stackoverflow.com/a/449897
-// Posted by splattne, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-04-13, License - CC BY-SA 4.0
-
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json.Serialization;
@@ -36,29 +32,23 @@ public class MailService
 
         SmtpClient mySmtpClient = new SmtpClient(serverName, port);
 
-            // set smtp-client with basicAuthentication
-            mySmtpClient.UseDefaultCredentials = false;
-            NetworkCredential basicAuthenticationInfo = new NetworkCredential(fromUsername, fromPassword);
+        mySmtpClient.UseDefaultCredentials = false;
+        NetworkCredential basicAuthenticationInfo = new NetworkCredential(fromUsername, fromPassword);
         mySmtpClient.Credentials = basicAuthenticationInfo;
         mySmtpClient.EnableSsl = SSLRequired;
 
-        // add from,to mailaddresses
         MailAddress from = new MailAddress(fromUsername, "Habit-Game");
         MailAddress to = new MailAddress(toUsername);
         MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
 
-        // add ReplyTo
         MailAddress replyTo = new MailAddress(fromUsername);
         myMail.ReplyToList.Add(replyTo);
 
-        // set subject and encoding
         myMail.Subject = "Habit-Game Progress Report";
         myMail.SubjectEncoding = System.Text.Encoding.UTF8;
 
-        // set body-message and encoding
         myMail.Body = body;
         myMail.BodyEncoding = System.Text.Encoding.UTF8;
-        // text or html
         myMail.IsBodyHtml = true;
 
         mySmtpClient.Send(myMail);
